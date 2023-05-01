@@ -168,13 +168,14 @@ struct NeuralNetwork: Codable {
                     sumError += pow(error, 2)
                 }
                 if sumError <= targetError {
+                    print("Target error reached")
                     print("epoch: \(epoch), learning rate: \(learningRate), error: \(sumError)")
                     return
                 }
+                print("epoch: \(epoch), learning rate: \(learningRate), error: \(sumError)")
                 propagateBackward(expectedOutputs: expectedOutputs[j])
                 updateWeights(learningRate: learningRate, trainingInputs: trainingInputs[j])
             }
-            print("epoch: \(epoch), learning rate: \(learningRate), error: \(sumError)")
         }
     }
 

@@ -1,6 +1,6 @@
 #  Run Information
 
-### Hyper-parameters: 1 (0m 0s)
+### Hyper-parameters: 1 (0m 0s) - Bad Network
 - Layers: [784, 543, 200, 24, 1] 
 - Learning Rate: 0.06
 - Epochs: 5000
@@ -19,6 +19,8 @@ Node {
     collector: 0.9999998964294304
     delta: 0.0
 }
+Training against '5':
+Average: 0.9999938269706522 (Not good)
 ==============================================
 ~/De/P/Sw/HandwritingRecognizer/D/HandwritingRecognizer/Build/Products/Debug speedup !2 ❯ ./HandwritingRecognizer                                                                                                                        7s
 Successfully opened database

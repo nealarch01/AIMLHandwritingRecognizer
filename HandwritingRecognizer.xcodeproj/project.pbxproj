@@ -14,7 +14,7 @@
 		BD53ADF429FF0AB4003D0B4E /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD53ADF029FF0AB4003D0B4E /* Node.swift */; };
 		BD53ADFD29FF17E3003D0B4E /* dataset.csv in Copy Files */ = {isa = PBXBuildFile; fileRef = BD53ADF729FF1093003D0B4E /* dataset.csv */; };
 		BD53AE0629FF2053003D0B4E /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = BD53AE0529FF2053003D0B4E /* SQLite */; };
-		BD53AE0829FF21DB003D0B4E /* handwriting.db in Copy Files */ = {isa = PBXBuildFile; fileRef = BD53AE0729FF20D4003D0B4E /* handwriting.db */; };
+		BDFC589429FF65BF0006EACE /* handwriting.db in Copy Files */ = {isa = PBXBuildFile; fileRef = BDFC589329FF65AD0006EACE /* handwriting.db */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +24,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
-				BD53AE0829FF21DB003D0B4E /* handwriting.db in Copy Files */,
+				BDFC589429FF65BF0006EACE /* handwriting.db in Copy Files */,
 				BD53ADFD29FF17E3003D0B4E /* dataset.csv in Copy Files */,
 			);
 			name = "Copy Files";
@@ -40,7 +40,7 @@
 		BD53ADEF29FF0AB4003D0B4E /* NeuralNetwork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NeuralNetwork.swift; sourceTree = "<group>"; };
 		BD53ADF029FF0AB4003D0B4E /* Node.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		BD53ADF729FF1093003D0B4E /* dataset.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = dataset.csv; sourceTree = "<group>"; };
-		BD53AE0729FF20D4003D0B4E /* handwriting.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = handwriting.db; sourceTree = "<group>"; };
+		BDFC589329FF65AD0006EACE /* handwriting.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = handwriting.db; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,7 +104,7 @@
 		BD53ADFB29FF1686003D0B4E /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				BD53AE0729FF20D4003D0B4E /* handwriting.db */,
+				BDFC589329FF65AD0006EACE /* handwriting.db */,
 			);
 			path = Data;
 			sourceTree = "<group>";

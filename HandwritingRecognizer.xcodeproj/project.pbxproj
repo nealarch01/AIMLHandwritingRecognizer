@@ -1,0 +1,369 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BD53ADE629FF0A42003D0B4E /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD53ADE529FF0A42003D0B4E /* main.swift */; };
+		BD53ADF129FF0AB4003D0B4E /* Edge.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD53ADED29FF0AB4003D0B4E /* Edge.swift */; };
+		BD53ADF229FF0AB4003D0B4E /* NetworkTopology.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD53ADEE29FF0AB4003D0B4E /* NetworkTopology.swift */; };
+		BD53ADF329FF0AB4003D0B4E /* NeuralNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD53ADEF29FF0AB4003D0B4E /* NeuralNetwork.swift */; };
+		BD53ADF429FF0AB4003D0B4E /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD53ADF029FF0AB4003D0B4E /* Node.swift */; };
+		BD53ADFD29FF17E3003D0B4E /* dataset.csv in Copy Files */ = {isa = PBXBuildFile; fileRef = BD53ADF729FF1093003D0B4E /* dataset.csv */; };
+		BD53AE0629FF2053003D0B4E /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = BD53AE0529FF2053003D0B4E /* SQLite */; };
+		BD53AE0829FF21DB003D0B4E /* handwriting.db in Copy Files */ = {isa = PBXBuildFile; fileRef = BD53AE0729FF20D4003D0B4E /* handwriting.db */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		BD53ADE029FF0A42003D0B4E /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				BD53AE0829FF21DB003D0B4E /* handwriting.db in Copy Files */,
+				BD53ADFD29FF17E3003D0B4E /* dataset.csv in Copy Files */,
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		BD53ADE229FF0A42003D0B4E /* HandwritingRecognizer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = HandwritingRecognizer; sourceTree = BUILT_PRODUCTS_DIR; };
+		BD53ADE529FF0A42003D0B4E /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		BD53ADED29FF0AB4003D0B4E /* Edge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Edge.swift; sourceTree = "<group>"; };
+		BD53ADEE29FF0AB4003D0B4E /* NetworkTopology.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkTopology.swift; sourceTree = "<group>"; };
+		BD53ADEF29FF0AB4003D0B4E /* NeuralNetwork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NeuralNetwork.swift; sourceTree = "<group>"; };
+		BD53ADF029FF0AB4003D0B4E /* Node.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
+		BD53ADF729FF1093003D0B4E /* dataset.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = dataset.csv; sourceTree = "<group>"; };
+		BD53AE0729FF20D4003D0B4E /* handwriting.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = handwriting.db; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BD53ADDF29FF0A42003D0B4E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD53AE0629FF2053003D0B4E /* SQLite in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BD53ADD929FF0A42003D0B4E = {
+			isa = PBXGroup;
+			children = (
+				BD53ADE429FF0A42003D0B4E /* HandwritingRecognizer */,
+				BD53ADE329FF0A42003D0B4E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BD53ADE329FF0A42003D0B4E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BD53ADE229FF0A42003D0B4E /* HandwritingRecognizer */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BD53ADE429FF0A42003D0B4E /* HandwritingRecognizer */ = {
+			isa = PBXGroup;
+			children = (
+				BD53ADFB29FF1686003D0B4E /* Data */,
+				BD53ADF529FF0B9D003D0B4E /* MockData */,
+				BD53ADEC29FF0AB4003D0B4E /* NeuralNetwork */,
+				BD53ADE529FF0A42003D0B4E /* main.swift */,
+			);
+			path = HandwritingRecognizer;
+			sourceTree = "<group>";
+		};
+		BD53ADEC29FF0AB4003D0B4E /* NeuralNetwork */ = {
+			isa = PBXGroup;
+			children = (
+				BD53ADED29FF0AB4003D0B4E /* Edge.swift */,
+				BD53ADEE29FF0AB4003D0B4E /* NetworkTopology.swift */,
+				BD53ADEF29FF0AB4003D0B4E /* NeuralNetwork.swift */,
+				BD53ADF029FF0AB4003D0B4E /* Node.swift */,
+			);
+			path = NeuralNetwork;
+			sourceTree = "<group>";
+		};
+		BD53ADF529FF0B9D003D0B4E /* MockData */ = {
+			isa = PBXGroup;
+			children = (
+				BD53ADF729FF1093003D0B4E /* dataset.csv */,
+			);
+			path = MockData;
+			sourceTree = "<group>";
+		};
+		BD53ADFB29FF1686003D0B4E /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				BD53AE0729FF20D4003D0B4E /* handwriting.db */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BD53ADE129FF0A42003D0B4E /* HandwritingRecognizer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BD53ADE929FF0A42003D0B4E /* Build configuration list for PBXNativeTarget "HandwritingRecognizer" */;
+			buildPhases = (
+				BD53ADDE29FF0A42003D0B4E /* Sources */,
+				BD53ADDF29FF0A42003D0B4E /* Frameworks */,
+				BD53ADE029FF0A42003D0B4E /* Copy Files */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HandwritingRecognizer;
+			packageProductDependencies = (
+				BD53AE0529FF2053003D0B4E /* SQLite */,
+			);
+			productName = HandwritingRecognizer;
+			productReference = BD53ADE229FF0A42003D0B4E /* HandwritingRecognizer */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BD53ADDA29FF0A42003D0B4E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1430;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					BD53ADE129FF0A42003D0B4E = {
+						CreatedOnToolsVersion = 14.3;
+						LastSwiftMigration = 1430;
+					};
+				};
+			};
+			buildConfigurationList = BD53ADDD29FF0A42003D0B4E /* Build configuration list for PBXProject "HandwritingRecognizer" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = BD53ADD929FF0A42003D0B4E;
+			packageReferences = (
+				BD53AE0429FF2053003D0B4E /* XCRemoteSwiftPackageReference "SQLite" */,
+			);
+			productRefGroup = BD53ADE329FF0A42003D0B4E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BD53ADE129FF0A42003D0B4E /* HandwritingRecognizer */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BD53ADDE29FF0A42003D0B4E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD53ADF229FF0AB4003D0B4E /* NetworkTopology.swift in Sources */,
+				BD53ADF429FF0AB4003D0B4E /* Node.swift in Sources */,
+				BD53ADF129FF0AB4003D0B4E /* Edge.swift in Sources */,
+				BD53ADE629FF0A42003D0B4E /* main.swift in Sources */,
+				BD53ADF329FF0AB4003D0B4E /* NeuralNetwork.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		BD53ADE729FF0A42003D0B4E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		BD53ADE829FF0A42003D0B4E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		BD53ADEA29FF0A42003D0B4E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = HV7TRQD227;
+				ENABLE_HARDENED_RUNTIME = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		BD53ADEB29FF0A42003D0B4E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = HV7TRQD227;
+				ENABLE_HARDENED_RUNTIME = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BD53ADDD29FF0A42003D0B4E /* Build configuration list for PBXProject "HandwritingRecognizer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BD53ADE729FF0A42003D0B4E /* Debug */,
+				BD53ADE829FF0A42003D0B4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BD53ADE929FF0A42003D0B4E /* Build configuration list for PBXNativeTarget "HandwritingRecognizer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BD53ADEA29FF0A42003D0B4E /* Debug */,
+				BD53ADEB29FF0A42003D0B4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		BD53AE0429FF2053003D0B4E /* XCRemoteSwiftPackageReference "SQLite" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.14.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		BD53AE0529FF2053003D0B4E /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BD53AE0429FF2053003D0B4E /* XCRemoteSwiftPackageReference "SQLite" */;
+			productName = SQLite;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = BD53ADDA29FF0A42003D0B4E /* Project object */;
+}

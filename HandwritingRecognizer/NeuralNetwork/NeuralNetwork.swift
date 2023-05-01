@@ -96,8 +96,7 @@ struct NeuralNetwork: Codable {
                 for previousNodeIndex in 0..<layers[layerIndex - 1].count {
                     weightedSum += layers[layerIndex - 1][previousNodeIndex].collector * layers[layerIndex - 1][previousNodeIndex].connections[currentNodeIndex].weight
                 }
-                let transferedValue = transfer(activation: weightedSum)
-                layers[layerIndex][currentNodeIndex].updateCollector(newCollector: transferedValue)
+                layers[layerIndex][currentNodeIndex].updateCollector(newCollector: transfer(activation: weightedSum))
             }
         }
     }
@@ -164,7 +163,6 @@ struct NeuralNetwork: Codable {
                     sumError += pow(error, 2)
                 }
                 if sumError > targetError {
-                    print("epoch: \(epoch), learning rate: \(learningRate), error: \(sumError)")
                     propagateBackward(expectedOutputs: &expectedOutputsCpy[j])
                     updateWeights(learningRate: learningRate, trainingInputs: &trainingInputsCpy[j])
                 } else {
@@ -173,6 +171,7 @@ struct NeuralNetwork: Codable {
                     return
                 }
             }
+            print("epoch: \(epoch), learning rate: \(learningRate), error: \(sumError)")
         }
     }
 

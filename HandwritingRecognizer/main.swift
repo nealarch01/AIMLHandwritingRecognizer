@@ -78,10 +78,6 @@ func runSmallData() {
     network2.traverseColumn(atIndex: 2)
 }
 
-// runSmallData()
-
-
-
 func initDB() -> Connection? {
     do {
         let db = try Connection("handwriting.db")
@@ -93,21 +89,10 @@ func initDB() -> Connection? {
     }
 }
 
-func fetchLetter(_ letter: String, connection: Connection) {
-    do {
-        let statement = try connection.prepare("SELECT * FROM handwriting_data WHERE letter='0'")
-        for row in statement {
-            print(row)
-        }
-    } catch let error {
-        print(error.localizedDescription)
-    }
-}
-
-func fetchLetterA(connection: Connection) -> (trainingInputs: [[Double]], expectedOutputs: [[Double]])? {
+func fetchLetter(_ letter: Int, connection: Connection) -> (trainingInputs: [[Double]], expectedOutputs: [[Double]])? {
     var trainingInputs: [[Double]] = []
     do {
-        let statement = try connection.prepare("SELECT * FROM handwriting_data WHERE letter='0' LIMIT 10")
+        let statement = try connection.prepare("SELECT * FROM handwriting_data WHERE letter='\(letter)'")
         for row in statement {
             trainingInputs.append([])
             for i in 1..<row.count {
@@ -120,7 +105,35 @@ func fetchLetterA(connection: Connection) -> (trainingInputs: [[Double]], expect
                 }
             }
         }
-        let expectedOutputs: [[Double]] = [[Double]](repeating: [Double](repeating: 1, count: trainingInputs[0].count), count: trainingInputs.count)
+        let expectedOutputs: [[Double]] = [[Double]](repeating: [Double](repeating: Double(letter + 1), count: trainingInputs[0].count), count: trainingInputs.count)
+        return (trainingInputs: trainingInputs, expectedOutputs: expectedOutputs)
+    } catch let error {
+        print(error.localizedDescription)
+        return nil
+    }
+}
+
+func normalize(_ pixel: Double) -> Double {
+    return pixel / 255.0
+}
+
+func fetchLetterA(connection: Connection) -> (trainingInputs: [[Double]], expectedOutputs: [[Double]])? {
+    var trainingInputs: [[Double]] = []
+    do {
+        let statement = try connection.prepare("SELECT * FROM handwriting_data WHERE letter='0'")
+        for row in statement {
+            trainingInputs.append([])
+            for i in 1..<row.count {
+                switch row[i] {
+                case let doubleValue as Double:
+                    trainingInputs[trainingInputs.count - 1].append(doubleValue)
+                default:
+                    print("Non double")
+                    continue
+                }
+            }
+        }
+        let expectedOutputs: [[Double]] = [[Double]](repeating: [1.0], count: trainingInputs.count)
         return (trainingInputs: trainingInputs, expectedOutputs: expectedOutputs)
     } catch let error {
         print(error.localizedDescription)
@@ -135,8 +148,21 @@ func main() {
     guard let data = fetchLetterA(connection: connection) else {
         exit(EXIT_FAILURE)
     }
-    print(data.trainingInputs.count)
-    print(data.expectedOutputs.count)
+    let normalizedTrainingData = data.trainingInputs.map { return $0.map {
+            return normalize($0)
+        }
+    }
+    print(data.expectedOutputs)
+    let networkTopology = NetworkTopology(layers: [784, 562, 321, 130, 50, 20, 6, 1], collectors: [Double](repeating: 0.0, count: 784))
+    let neuralNetwork = NeuralNetwork(topology: networkTopology)
+    neuralNetwork.train(
+        trainingInputs: normalizedTrainingData,
+        expectedOutputs: data.expectedOutputs,
+        learningRate: 0.5,
+        epochs: 500,
+        targetError: 0.015
+    )
+    neuralNetwork.traverseColumn(atIndex: networkTopology.layers.count - 1)
     exit(EXIT_SUCCESS)
 }
 

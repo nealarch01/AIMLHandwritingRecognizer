@@ -175,7 +175,7 @@ struct NeuralNetwork: Codable {
         }
     }
 
-    public func test(inputs: [[Double]]) -> [[Double]] {
+    public func test(inputs: [[Double]]) -> Double {
         var inputsCpy = inputs
         var outputs: [[Double]] = []
         for i in 0..<inputs.count {
@@ -184,7 +184,13 @@ struct NeuralNetwork: Codable {
             let output = layers.last!.map { $0.collector }
             outputs.append(output)
         }
-        return outputs
+        var sum = 0.0
+        for layerOutput in outputs {
+            for output in layerOutput {
+                sum += output
+            }
+        }
+        return sum / Double(inputsCpy.count)
     }
 
     public func serialize() -> String? {

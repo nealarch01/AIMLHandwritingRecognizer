@@ -105,7 +105,7 @@ func fetchLetter(_ letter: Int, connection: Connection) -> (trainingInputs: [[Do
                 }
             }
         }
-        let expectedOutputs: [[Double]] = [[Double]](repeating: [Double](repeating: Double(letter + 1), count: trainingInputs[0].count), count: trainingInputs.count)
+        let expectedOutputs: [[Double]] = [[Double]](repeating: [Double(letter + 1)], count: trainingInputs.count)
         return (trainingInputs: trainingInputs, expectedOutputs: expectedOutputs)
     } catch let error {
         print(error.localizedDescription)
@@ -152,7 +152,6 @@ func main() {
             return normalize($0)
         }
     }
-    print(data.expectedOutputs)
     let networkTopology = NetworkTopology(layers: [784, 562, 321, 130, 50, 20, 6, 1], collectors: [Double](repeating: 0.0, count: 784))
     let neuralNetwork = NeuralNetwork(topology: networkTopology)
     neuralNetwork.train(

@@ -175,10 +175,11 @@ struct NeuralNetwork: Codable {
         }
     }
 
-    public func test(inputs: inout [[Double]]) -> [[Double]] {
+    public func test(inputs: [[Double]]) -> [[Double]] {
+        var inputsCpy = inputs
         var outputs: [[Double]] = []
         for i in 0..<inputs.count {
-            setInputLayer(trainingInputs: &inputs[i])
+            setInputLayer(trainingInputs: &inputsCpy[i])
             propagateForward()
             let output = layers.last!.map { $0.collector }
             outputs.append(output)

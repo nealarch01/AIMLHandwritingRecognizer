@@ -70,29 +70,23 @@ struct NeuralNetwork: Codable {
         return sum
     }
 
-    public func setInputLayer(trainingInputs: [Double]) {
-        var trainingInputsFixed = trainingInputs // if the number of training data is less than the number of input layers, append 0
-        if trainingInputsFixed.count < layers[0].count - 1{
+    public func setInputLayer(trainingInputs: inout [Double]) {
+        if trainingInputs.count < layers[0].count - 1{
+            var trainingInputsFixed = trainingInputs // if the number of training data is less than the number of input layers, append 0
             for _ in trainingInputsFixed.count..<layers[0].count {
                 trainingInputsFixed.append(0.0)
             }
+             for i in 0..<layers[0].count {
+                layers[0][i].updateCollector(newCollector: trainingInputsFixed[i])
+            }
         }
         for i in 0..<layers[0].count {
-            layers[0][i].updateCollector(newCollector: trainingInputsFixed[i])
+            layers[0][i].updateCollector(newCollector: trainingInputs[i])
         }
     }
 
     public func transfer(activation: Double) -> Double {
         return 1.0 / (1.0 + exp(-activation))
-    }
-
-    private func activate(node: Node, inputs: [Double]) -> Double {
-        var activation: Double = 0.0
-        for (index, connection) in node.connections.enumerated() {
-            activation += connection.weight * inputs[index]
-        }
-        print("Activation: \(activation)")
-        return activation
     }
 
     private func propagateForward() {
@@ -112,7 +106,7 @@ struct NeuralNetwork: Codable {
         return collector * (1.0 - collector)
     }
 
-   private func propagateBackward(expectedOutputs: [Double]) {
+   private func propagateBackward(expectedOutputs: inout [Double]) {
         for layerIndex in (0..<layers.count).reversed() {
             var errors: [Double] = []
             if layerIndex != layers.count - 1 { // if we are not at the output layer
@@ -139,7 +133,7 @@ struct NeuralNetwork: Codable {
         }
     }
 
-    public func updateWeights(learningRate: Double, trainingInputs: [Double]) {
+    public func updateWeights(learningRate: Double, trainingInputs: inout [Double]) {
         // General formula: weight = weight - learningRate * delta * collectorFromPreviousLayer
         for layerIndex in 1..<layers.count {
             let inputs: [Double] = layers[layerIndex - 1].map { $0.collector }
@@ -156,15 +150,17 @@ struct NeuralNetwork: Codable {
     }
 
     public func train(trainingInputs: [[Double]], expectedOutputs: [[Double]], learningRate: Double, epochs: Int, targetError: Double) {
+        var trainingInputsCpy = trainingInputs
+        var expectedOutputsCpy = expectedOutputs
         for epoch in 0..<epochs {
             var sumError: Double = 0.0
             for j in 0..<trainingInputs.count {
-                setInputLayer(trainingInputs: trainingInputs[j])
+                setInputLayer(trainingInputs: &trainingInputsCpy[j])
                 propagateForward()
                 let outputs = layers.last!.map { $0.collector }
                 for k in 0..<outputs.count {
                     // Add sum error here
-                    let error = expectedOutputs[j][k] - outputs[k]
+                    let error = expectedOutputsCpy[j][k] - outputs[k]
                     sumError += pow(error, 2)
                 }
                 if sumError <= targetError {
@@ -173,16 +169,16 @@ struct NeuralNetwork: Codable {
                     return
                 }
                 print("epoch: \(epoch), learning rate: \(learningRate), error: \(sumError)")
-                propagateBackward(expectedOutputs: expectedOutputs[j])
-                updateWeights(learningRate: learningRate, trainingInputs: trainingInputs[j])
+                propagateBackward(expectedOutputs: &expectedOutputsCpy[j])
+                updateWeights(learningRate: learningRate, trainingInputs: &trainingInputsCpy[j])
             }
         }
     }
 
-    public func test(inputs: [[Double]]) -> [[Double]] {
+    public func test(inputs: inout [[Double]]) -> [[Double]] {
         var outputs: [[Double]] = []
         for i in 0..<inputs.count {
-            setInputLayer(trainingInputs: inputs[i])
+            setInputLayer(trainingInputs: &inputs[i])
             propagateForward()
             let output = layers.last!.map { $0.collector }
             outputs.append(output)

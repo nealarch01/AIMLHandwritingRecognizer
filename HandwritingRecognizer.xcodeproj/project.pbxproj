@@ -41,6 +41,7 @@
 		BD53ADF029FF0AB4003D0B4E /* Node.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		BD53ADF729FF1093003D0B4E /* dataset.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = dataset.csv; sourceTree = "<group>"; };
 		BDFC589329FF65AD0006EACE /* handwriting.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = handwriting.db; sourceTree = "<group>"; };
+		BDFC589529FF9F350006EACE /* Runs.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Runs.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +59,7 @@
 		BD53ADD929FF0A42003D0B4E = {
 			isa = PBXGroup;
 			children = (
+				BDFC589529FF9F350006EACE /* Runs.md */,
 				BD53ADE429FF0A42003D0B4E /* HandwritingRecognizer */,
 				BD53ADE329FF0A42003D0B4E /* Products */,
 			);

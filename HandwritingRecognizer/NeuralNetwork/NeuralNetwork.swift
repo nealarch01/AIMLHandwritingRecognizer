@@ -163,6 +163,7 @@ struct NeuralNetwork: Codable {
                     sumError += pow(error, 2)
                 }
                 if sumError > targetError {
+                    print("epoch: \(epoch), learning rate: \(learningRate), error: \(sumError)")
                     propagateBackward(expectedOutputs: &expectedOutputsCpy[j])
                     updateWeights(learningRate: learningRate, trainingInputs: &trainingInputsCpy[j])
                 } else {
@@ -171,7 +172,6 @@ struct NeuralNetwork: Codable {
                     return
                 }
             }
-            print("epoch: \(epoch), learning rate: \(learningRate), error: \(sumError)")
         }
     }
 

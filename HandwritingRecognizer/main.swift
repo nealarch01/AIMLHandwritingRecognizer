@@ -91,10 +91,14 @@ func initDB() -> Connection? {
 
 func fetchLetter(_ letter: Int, connection: Connection) -> (trainingInputs: [[Double]], expectedOutputs: [[Double]])? {
     var trainingInputs: [[Double]] = []
+    var expectedOutputs: [[Double]] = []
     do {
         let statement = try connection.prepare("SELECT * FROM handwriting_data WHERE letter='\(letter)'")
         for row in statement {
             trainingInputs.append([])
+            if let expectedOutput = row[0] as? String {
+                expectedOutputs.append([Double(expectedOutput)!])
+            }
             for i in 1..<row.count {
                 switch row[i] {
                 case let doubleValue as Double:
@@ -105,7 +109,6 @@ func fetchLetter(_ letter: Int, connection: Connection) -> (trainingInputs: [[Do
                 }
             }
         }
-        let expectedOutputs: [[Double]] = [[Double]](repeating: [Double(letter + 1)], count: trainingInputs.count)
         return (trainingInputs: trainingInputs, expectedOutputs: expectedOutputs)
     } catch let error {
         print(error.localizedDescription)
@@ -118,24 +121,21 @@ func normalize(_ pixel: Double) -> Double {
 }
 
 func fetchLetterA(connection: Connection) -> (trainingInputs: [[Double]], expectedOutputs: [[Double]])? {
+    // MARK: -- MAKE SURE TO DELETE CSV HEADER or this will BREAK!!!!!!!!!
     var trainingInputs: [[Double]] = []
+    var expectedOutputs: [[Double]] = []
     do {
-        let statement = try connection.prepare("SELECT * FROM handwriting_data WHERE letter='0'")
+        let statement = try connection.prepare("SELECT * FROM a_train ORDER BY RANDOM()")
         for row in statement {
-            trainingInputs.append([])
+            trainingInputs.append([Double](repeating: 0.0, count: row.count))
+            expectedOutputs.append([row[0] as! Double])
             for i in 1..<row.count {
-                switch row[i] {
-                case let doubleValue as Double:
-                    trainingInputs[trainingInputs.count - 1].append(doubleValue)
-                default:
-                    print("Non double")
-                    continue
-                }
+                trainingInputs[trainingInputs.count - 1][i] = row[i] as! Double / 255.0
             }
         }
-        let expectedOutputs: [[Double]] = [[Double]](repeating: [1.0], count: trainingInputs.count)
         return (trainingInputs: trainingInputs, expectedOutputs: expectedOutputs)
     } catch let error {
+        print("An error occured")
         print(error.localizedDescription)
         return nil
     }
@@ -145,21 +145,21 @@ func main() {
      guard let connection = initDB() else {
         exit(EXIT_FAILURE)
     }
+    print("Fetching letter 'A'")
     guard let data = fetchLetterA(connection: connection) else {
         exit(EXIT_FAILURE)
     }
-    let normalizedTrainingData = data.trainingInputs.map { return $0.map {
-            return normalize($0)
-        }
-    }
-    let networkTopology = NetworkTopology(layers: [784, 562, 321, 130, 50, 20, 6, 1], collectors: [Double](repeating: 0.0, count: 784))
+    print("Normalizing training data")
+    print("Initializing neural network")
+    let networkTopology = NetworkTopology(layers: [784, 562, 130, 50, 12, 1], collectors: [Double](repeating: 0.0, count: 784))
     let neuralNetwork = NeuralNetwork(topology: networkTopology)
+    print("Training network..")
     neuralNetwork.train(
-        trainingInputs: normalizedTrainingData,
+        trainingInputs: data.trainingInputs,
         expectedOutputs: data.expectedOutputs,
         learningRate: 0.5,
-        epochs: 500,
-        targetError: 0.015
+        epochs: 100,
+        targetError: 0.05
     )
     neuralNetwork.traverseColumn(atIndex: networkTopology.layers.count - 1)
     exit(EXIT_SUCCESS)

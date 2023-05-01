@@ -125,7 +125,7 @@ func fetchLetterA(connection: Connection) -> (trainingInputs: [[Double]], expect
     var trainingInputs: [[Double]] = []
     var expectedOutputs: [[Double]] = []
     do {
-        let statement = try connection.prepare("SELECT * FROM a_train ORDER BY RANDOM()")
+        let statement = try connection.prepare("SELECT * FROM a_train WHERE LETTER='1' ORDER BY RANDOM()")
         for row in statement {
             trainingInputs.append([Double](repeating: 0.0, count: row.count))
             expectedOutputs.append([row[0] as! Double])

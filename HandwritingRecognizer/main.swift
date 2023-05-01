@@ -141,18 +141,30 @@ func fetchLetterA(connection: Connection) -> (trainingInputs: [[Double]], expect
     }
 }
 
-func main() {
-     guard let connection = initDB() else {
-        exit(EXIT_FAILURE)
+func fetchTestData(connection: Connection) -> [[Double]]? {
+    var testData: [[Double]] = []
+    do {
+        let statement = try connection.prepare("SELECT * FROM handwriting_data WHERE letter='5' ORDER BY RANDOM() LIMIT 1000")
+        for row in statement {
+            testData.append([Double](repeating: 0.0, count: row.count))
+            for i in 1..<row.count {
+                testData[testData.count - 1][i] = row[i] as! Double / 255.0
+            }
+        }
+        return testData
+    } catch let error {
+        print(error.localizedDescription)
+        return nil
     }
+}
+
+func trainLetterA(connection: Connection, neuralNetwork: inout NeuralNetwork) {
     print("Fetching letter 'A'")
     guard let data = fetchLetterA(connection: connection) else {
+        print("Failed to fetch letter 'A'")
         exit(EXIT_FAILURE)
     }
     print("Normalizing training data")
-    print("Initializing neural network")
-    let networkTopology = NetworkTopology(layers: [784, 8, 4, 1], collectors: [Double](repeating: 0.0, count: 784))
-    let neuralNetwork = NeuralNetwork(topology: networkTopology)
     print("Training network..")
     neuralNetwork.train(
         trainingInputs: data.trainingInputs,
@@ -161,7 +173,31 @@ func main() {
         epochs: 5000,
         targetError: 0.001
     )
-    neuralNetwork.traverseColumn(atIndex: networkTopology.layers.count - 1)
+    neuralNetwork.traverseColumn(atIndex: neuralNetwork.layerCount - 1)
+}
+
+func testLetterA(connection: Connection, neuralNetwork: inout NeuralNetwork) {
+    print("Fetching test data")
+    guard let testData = fetchTestData(connection: connection) else {
+        print("Failed to fetch test data")
+        exit(EXIT_FAILURE)
+    }
+    print(testData.count)
+    print("Testing..")
+    let average = neuralNetwork.test(inputs: testData)
+    print(average)
+}
+
+func main() {
+    print("Creting connection")
+    guard let connection = initDB() else {
+        exit(EXIT_FAILURE)
+    }
+    print("Initializing neural network")
+    let networkTopology = NetworkTopology(layers: [784, 6, 4, 1], collectors: [Double](repeating: 0.0, count: 784))
+    var neuralNetwork = NeuralNetwork(topology: networkTopology)
+    trainLetterA(connection: connection, neuralNetwork: &neuralNetwork)
+    testLetterA(connection: connection, neuralNetwork: &neuralNetwork)
     exit(EXIT_SUCCESS)
 }
 

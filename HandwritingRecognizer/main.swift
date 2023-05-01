@@ -125,7 +125,7 @@ func fetchLetterA(connection: Connection) -> (trainingInputs: [[Double]], expect
     var trainingInputs: [[Double]] = []
     var expectedOutputs: [[Double]] = []
     do {
-        let statement = try connection.prepare("SELECT * FROM a_train WHERE LETTER='1' ORDER BY RANDOM()")
+        let statement = try connection.prepare("SELECT * FROM a_train WHERE LETTER='1' ORDER BY RANDOM() LIMIT 5000")
         for row in statement {
             trainingInputs.append([Double](repeating: 0.0, count: row.count))
             expectedOutputs.append([row[0] as! Double])
@@ -151,15 +151,15 @@ func main() {
     }
     print("Normalizing training data")
     print("Initializing neural network")
-    let networkTopology = NetworkTopology(layers: [784, 562, 130, 50, 12, 1], collectors: [Double](repeating: 0.0, count: 784))
+    let networkTopology = NetworkTopology(layers: [784, 512, 256, 128, 32, 16, 8, 4, 1], collectors: [Double](repeating: 0.0, count: 784))
     let neuralNetwork = NeuralNetwork(topology: networkTopology)
     print("Training network..")
     neuralNetwork.train(
         trainingInputs: data.trainingInputs,
         expectedOutputs: data.expectedOutputs,
-        learningRate: 0.5,
-        epochs: 100,
-        targetError: 0.05
+        learningRate: 0.6,
+        epochs: 5000,
+        targetError: 0.001
     )
     neuralNetwork.traverseColumn(atIndex: networkTopology.layers.count - 1)
     exit(EXIT_SUCCESS)
@@ -167,4 +167,5 @@ func main() {
 
 
 main()
+//runSmallData()
 

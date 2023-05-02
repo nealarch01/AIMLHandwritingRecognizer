@@ -183,12 +183,24 @@ func testLetterA(connection: Connection, neuralNetwork: inout NeuralNetwork) {
 
 func main() {
     let arguments = CommandLine.arguments
-    if arguments.count != 2 {
-        print("Usage: ./HandwritingRecognizer 0")
+    if arguments.count != 3 {
+        print("Usage: ./HandwritingRecognizer <letter_number> <limit>")
         exit(EXIT_FAILURE)
     }
     guard let letterNumber = Int(arguments[1]) else {
         print("Letter must be a number 'A' = 0 and 'Z' = 25")
+        exit(EXIT_FAILURE)
+    }
+    if letterNumber < 0 || letterNumber > 25 {
+        print("Letters must be between 0 and 25")
+        exit(EXIT_FAILURE)
+    }
+    guard let limit = Int(arguments[2]) else {
+        print("Specify limit as a number")
+        exit(EXIT_FAILURE)
+    }
+    if limit < 1 {
+        print("Limit must be at least 1")
         exit(EXIT_FAILURE)
     }
     print("------------------------------------------------")
@@ -201,14 +213,13 @@ func main() {
     let networkTopology = NetworkTopology(layers: [784, 78, 4, 2, 1], collectors: [Double](repeating: 0.0, count: 784))
     print("Network structure: \(networkTopology.layers)")
     let neuralNetwork = NeuralNetwork(topology: networkTopology)
-    let limit = 50
     print("------------------------------------------------")
     print("Fetching letter...")
     guard let data = fetchLetter(letterNumber, limit: limit, connection: connection) else {
         exit(EXIT_FAILURE)
     }
-    let learningRate = 0.45
-    let targetError = 0.001
+    let learningRate = 0.65
+    let targetError = 0.009
     let epochs = 250
     print("------------------------------------------------")
     print("HYPERPARAMETERS:")

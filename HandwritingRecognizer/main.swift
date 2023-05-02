@@ -95,11 +95,11 @@ func normalize(_ pixel: Double) -> Double {
     return pixel / 255.0
 }
 
-func fetchLetter(_ letter: Int, connection: Connection) -> (trainingInputs: [[Double]], expectedOutputs: [[Double]])? {
+func fetchLetter(_ letter: Int, limit: Int, connection: Connection) -> (trainingInputs: [[Double]], expectedOutputs: [[Double]])? {
     var trainingInputs: [[Double]] = []
     var expectedOutputs: [[Double]] = []
     do {
-        let statement = try connection.prepare("SELECT * FROM handwriting_data WHERE letter='\(letter)' ORDER BY RANDOM() LIMIT 5")
+        let statement = try connection.prepare("SELECT * FROM handwriting_data WHERE letter='\(letter)' ORDER BY RANDOM() LIMIT \(limit)")
         for row in statement {
             trainingInputs.append([Double](repeating: 0.0, count: row.count))
             expectedOutputs.append([row[0] as! Double])
@@ -107,7 +107,7 @@ func fetchLetter(_ letter: Int, connection: Connection) -> (trainingInputs: [[Do
                 trainingInputs[trainingInputs.count - 1][i] = normalize(row[i] as! Double)
             }
         }
-        return (trainingInputs: trainingInputs, expectedOutputs: [[Double]](repeating: [1.0], count: 784)) // TODO: Swap this hacked solution
+        return (trainingInputs: trainingInputs, expectedOutputs: [[Double]](repeating: [1.0], count: limit)) // TODO: Swap this hacked solution
     } catch let error {
         print(error.localizedDescription)
         return nil
@@ -137,7 +137,7 @@ func fetchLetterA(connection: Connection) -> (trainingInputs: [[Double]], expect
 func fetchTestData(connection: Connection) -> [[Double]]? {
     var testData: [[Double]] = []
     do {
-        let statement = try connection.prepare("SELECT * FROM handwriting_data WHERE letter='5' ORDER BY RANDOM() LIMIT 100")
+        let statement = try connection.prepare("SELECT * FROM handwriting_data WHERE letter='5' ORDER BY RANDOM() LIMIT 1000")
         for row in statement {
             testData.append([Double](repeating: 0.0, count: row.count))
             for i in 1..<row.count {
@@ -191,25 +191,33 @@ func main() {
         print("Letter must be a number 'A' = 0 and 'Z' = 25")
         exit(EXIT_FAILURE)
     }
-    print("Creting connection")
+    print("------------------------------------------------")
+    print("Initializing SQL connection.")
     guard let connection = initDB() else {
         exit(EXIT_FAILURE)
     }
-    print("Initializing neural network")
-    print("Training network for letter: \(letterNumber)")
-    let networkTopology = NetworkTopology(layers: [784, 250, 60, 4, 1], collectors: [Double](repeating: 0.0, count: 784))
-    var neuralNetwork = NeuralNetwork(topology: networkTopology)
-    guard let data = fetchLetter(letterNumber, connection: connection) else {
+    print("------------------------------------------------")
+    print("Initializing neural network structure..")
+    let networkTopology = NetworkTopology(layers: [784, 353, 4, 2, 1], collectors: [Double](repeating: 0.0, count: 784))
+    print("Network structure: \(networkTopology.layers)")
+    let neuralNetwork = NeuralNetwork(topology: networkTopology)
+    let limit = 1000
+    print("------------------------------------------------")
+    print("Fetching letter...")
+    guard let data = fetchLetter(letterNumber, limit: limit, connection: connection) else {
         exit(EXIT_FAILURE)
     }
     let learningRate = 0.45
     let targetError = 0.001
     let epochs = 250
-    print("Hyperparameters:")
+    print("------------------------------------------------")
+    print("HYPERPARAMETERS:")
     print("Learning Rate: \(learningRate)")
     print("Target Error: \(targetError)")
     print("Training Network \(epochs)")
     print("Number of rows: \(data.trainingInputs.count)")
+    print("------------------------------------------------")
+    print("Training network for letter: \(letterNumber)")
     neuralNetwork.train(
         trainingInputs: data.trainingInputs,
         expectedOutputs: data.expectedOutputs,
@@ -217,6 +225,8 @@ func main() {
         epochs: epochs,
         targetError: targetError
     )
+    let collector = neuralNetwork.outputsAverage()
+    print("Collector: \(collector)")
     exit(EXIT_SUCCESS)
 }
 

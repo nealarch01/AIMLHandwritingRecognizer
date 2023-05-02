@@ -1,5 +1,6 @@
 # HandwritingRecognizerCL
 
+<img width="1680" alt="Screenshot 2023-05-01 at 9 21 41 PM" src="https://user-images.githubusercontent.com/73256760/235578732-b3bafa11-7d56-41b6-a917-abd52573f5e2.png">
 
 <img width="1672" alt="Screenshot 2023-05-01 at 8 09 55 PM" src="https://user-images.githubusercontent.com/73256760/235576114-29ed709c-7936-4a57-98b1-d7dbc8a345b3.png">
 

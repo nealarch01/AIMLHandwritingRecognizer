@@ -45,10 +45,22 @@ struct NeuralNetwork: Codable {
             print("Layer does not exist")
             return
         }
-        print("Column \(atIndex):")
         for node in layers[atIndex] {
             node.display()
         }
+    }
+    
+    public func outputs() -> [Double] {
+        return layers[layers.count - 1].map { $0.collector }
+    }
+    
+    public func outputsAverage() -> Double {
+        var sum = 0.0
+        let numberOfOutputs = layers[layers.count - 1].count
+        for i in 0..<numberOfOutputs {
+            sum += layers[layers.count - 1][i].collector
+        }
+        return sum / Double(numberOfOutputs)
     }
 
     public func traverseLayers() {

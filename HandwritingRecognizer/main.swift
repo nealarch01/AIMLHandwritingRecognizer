@@ -89,43 +89,36 @@ func initDB() -> Connection? {
     }
 }
 
+
+
+func normalize(_ pixel: Double) -> Double {
+    return pixel / 255.0
+}
+
 func fetchLetter(_ letter: Int, connection: Connection) -> (trainingInputs: [[Double]], expectedOutputs: [[Double]])? {
     var trainingInputs: [[Double]] = []
     var expectedOutputs: [[Double]] = []
     do {
-        let statement = try connection.prepare("SELECT * FROM handwriting_data WHERE letter='\(letter)'")
+        let statement = try connection.prepare("SELECT * FROM handwriting_data WHERE letter='\(letter)' ORDER BY RANDOM() LIMIT 5")
         for row in statement {
-            trainingInputs.append([])
-            if let expectedOutput = row[0] as? String {
-                expectedOutputs.append([Double(expectedOutput)!])
-            }
+            trainingInputs.append([Double](repeating: 0.0, count: row.count))
+            expectedOutputs.append([row[0] as! Double])
             for i in 1..<row.count {
-                switch row[i] {
-                case let doubleValue as Double:
-                    trainingInputs[trainingInputs.count - 1].append(doubleValue)
-                default:
-                    print("Non double")
-                    continue
-                }
+                trainingInputs[trainingInputs.count - 1][i] = normalize(row[i] as! Double)
             }
         }
-        return (trainingInputs: trainingInputs, expectedOutputs: expectedOutputs)
+        return (trainingInputs: trainingInputs, expectedOutputs: [[Double]](repeating: [1.0], count: 784)) // TODO: Swap this hacked solution
     } catch let error {
         print(error.localizedDescription)
         return nil
     }
 }
 
-func normalize(_ pixel: Double) -> Double {
-    return pixel / 255.0
-}
-
 func fetchLetterA(connection: Connection) -> (trainingInputs: [[Double]], expectedOutputs: [[Double]])? {
-    // MARK: -- MAKE SURE TO DELETE CSV HEADER or this will BREAK!!!!!!!!!
     var trainingInputs: [[Double]] = []
     var expectedOutputs: [[Double]] = []
     do {
-        let statement = try connection.prepare("SELECT * FROM a_train WHERE LETTER='1' ORDER BY RANDOM()")
+        let statement = try connection.prepare("SELECT * FROM a_train WHERE LETTER='1' ORDER BY RANDOM() LIMIT 100")
         for row in statement {
             trainingInputs.append([Double](repeating: 0.0, count: row.count))
             expectedOutputs.append([row[0] as! Double])
@@ -144,7 +137,7 @@ func fetchLetterA(connection: Connection) -> (trainingInputs: [[Double]], expect
 func fetchTestData(connection: Connection) -> [[Double]]? {
     var testData: [[Double]] = []
     do {
-        let statement = try connection.prepare("SELECT * FROM handwriting_data WHERE letter='5' ORDER BY RANDOM() LIMIT 1000")
+        let statement = try connection.prepare("SELECT * FROM handwriting_data WHERE letter='5' ORDER BY RANDOM() LIMIT 100")
         for row in statement {
             testData.append([Double](repeating: 0.0, count: row.count))
             for i in 1..<row.count {
@@ -169,7 +162,7 @@ func trainLetterA(connection: Connection, neuralNetwork: inout NeuralNetwork) {
     neuralNetwork.train(
         trainingInputs: data.trainingInputs,
         expectedOutputs: data.expectedOutputs,
-        learningRate: 0.6,
+        learningRate: 0.3,
         epochs: 5000,
         targetError: 0.001
     )
@@ -189,15 +182,41 @@ func testLetterA(connection: Connection, neuralNetwork: inout NeuralNetwork) {
 }
 
 func main() {
+    let arguments = CommandLine.arguments
+    if arguments.count != 2 {
+        print("Usage: ./HandwritingRecognizer 0")
+        exit(EXIT_FAILURE)
+    }
+    guard let letterNumber = Int(arguments[1]) else {
+        print("Letter must be a number 'A' = 0 and 'Z' = 25")
+        exit(EXIT_FAILURE)
+    }
     print("Creting connection")
     guard let connection = initDB() else {
         exit(EXIT_FAILURE)
     }
     print("Initializing neural network")
-    let networkTopology = NetworkTopology(layers: [784, 6, 4, 1], collectors: [Double](repeating: 0.0, count: 784))
+    print("Training network for letter: \(letterNumber)")
+    let networkTopology = NetworkTopology(layers: [784, 250, 60, 4, 1], collectors: [Double](repeating: 0.0, count: 784))
     var neuralNetwork = NeuralNetwork(topology: networkTopology)
-    trainLetterA(connection: connection, neuralNetwork: &neuralNetwork)
-    testLetterA(connection: connection, neuralNetwork: &neuralNetwork)
+    guard let data = fetchLetter(letterNumber, connection: connection) else {
+        exit(EXIT_FAILURE)
+    }
+    let learningRate = 0.45
+    let targetError = 0.001
+    let epochs = 250
+    print("Hyperparameters:")
+    print("Learning Rate: \(learningRate)")
+    print("Target Error: \(targetError)")
+    print("Training Network \(epochs)")
+    print("Number of rows: \(data.trainingInputs.count)")
+    neuralNetwork.train(
+        trainingInputs: data.trainingInputs,
+        expectedOutputs: data.expectedOutputs,
+        learningRate: learningRate,
+        epochs: epochs,
+        targetError: targetError
+    )
     exit(EXIT_SUCCESS)
 }
 

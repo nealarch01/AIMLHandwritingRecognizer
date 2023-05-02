@@ -198,10 +198,10 @@ func main() {
     }
     print("------------------------------------------------")
     print("Initializing neural network structure..")
-    let networkTopology = NetworkTopology(layers: [784, 353, 4, 2, 1], collectors: [Double](repeating: 0.0, count: 784))
+    let networkTopology = NetworkTopology(layers: [784, 78, 4, 2, 1], collectors: [Double](repeating: 0.0, count: 784))
     print("Network structure: \(networkTopology.layers)")
     let neuralNetwork = NeuralNetwork(topology: networkTopology)
-    let limit = 1000
+    let limit = 50
     print("------------------------------------------------")
     print("Fetching letter...")
     guard let data = fetchLetter(letterNumber, limit: limit, connection: connection) else {

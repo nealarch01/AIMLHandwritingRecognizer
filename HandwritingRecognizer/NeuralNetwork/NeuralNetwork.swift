@@ -49,7 +49,6 @@ struct NeuralNetwork: Codable {
         for node in layers[atIndex] {
             node.display()
         }
-        print("==============================================")
     }
 
     public func traverseLayers() {

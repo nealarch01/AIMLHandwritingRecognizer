@@ -73,7 +73,7 @@ struct NeuralNetwork: Codable {
         }
     }
 
-    public func layerSummation(atIndex: Int) -> Double {
+    private func layerSummation(atIndex: Int) -> Double {
         var sum: Double = 0.0
         for node in layers[atIndex] {
             sum += node.collector
@@ -81,7 +81,7 @@ struct NeuralNetwork: Codable {
         return sum
     }
 
-    public func setInputLayer(trainingInputs: inout [Double]) {
+    private func setInputLayer(trainingInputs: inout [Double]) {
         if trainingInputs.count < layers[0].count - 1{
             var trainingInputsFixed = trainingInputs // if the number of training data is less than the number of input layers, append 0
             for _ in trainingInputsFixed.count..<layers[0].count {
@@ -96,7 +96,7 @@ struct NeuralNetwork: Codable {
         }
     }
 
-    public func transfer(activation: Double) -> Double {
+    private func transfer(activation: Double) -> Double {
         return 1.0 / (1.0 + exp(-activation))
     }
 
@@ -112,7 +112,7 @@ struct NeuralNetwork: Codable {
         }
     }
 
-    public func transferDerivative(collector: Double) -> Double {
+    private func transferDerivative(collector: Double) -> Double {
         return collector * (1.0 - collector)
     }
 
@@ -143,7 +143,7 @@ struct NeuralNetwork: Codable {
         }
     }
 
-    public func updateWeights(learningRate: Double, trainingInputs: inout [Double]) {
+    private func updateWeights(learningRate: Double, trainingInputs: inout [Double]) {
         // General formula: weight = weight - learningRate * delta * collectorFromPreviousLayer
         for layerIndex in 1..<layers.count {
             let inputs: [Double] = layers[layerIndex - 1].map { $0.collector }
@@ -194,13 +194,7 @@ struct NeuralNetwork: Codable {
             let output = layers.last!.map { $0.collector }
             outputs.append(output)
         }
-        var sum = 0.0
-        for layerOutput in outputs {
-            for output in layerOutput {
-                sum += output
-            }
-        }
-        return sum / Double(inputsCpy.count)
+        return outputsAverage()
     }
 
     public func serialize() -> String? {

@@ -72,10 +72,10 @@ func runSmallData() {
     }
     print("Running network: [4, 2, 1]")
     let network1 = network421(trainingInputs: trainingInputs, expectedOutputs: expectedOutputs)
-    network1.traverseColumn(atIndex: 2)
+    network1.printColumn(atIndex: 2)
     print("\nRunning network: [4, 3, 1]")
     let network2 = network431(trainingInputs: trainingInputs, expectedOutputs: expectedOutputs)
-    network2.traverseColumn(atIndex: 2)
+    network2.printColumn(atIndex: 2)
 }
 
 func initDB() -> Connection? {
@@ -88,8 +88,6 @@ func initDB() -> Connection? {
         return nil
     }
 }
-
-
 
 func normalize(_ pixel: Double) -> Double {
     return pixel / 255.0
@@ -114,30 +112,10 @@ func fetchLetter(_ letter: Int, limit: Int, connection: Connection) -> (training
     }
 }
 
-func fetchLetterA(connection: Connection) -> (trainingInputs: [[Double]], expectedOutputs: [[Double]])? {
-    var trainingInputs: [[Double]] = []
-    var expectedOutputs: [[Double]] = []
-    do {
-        let statement = try connection.prepare("SELECT * FROM a_train WHERE LETTER='1' ORDER BY RANDOM() LIMIT 100")
-        for row in statement {
-            trainingInputs.append([Double](repeating: 0.0, count: row.count))
-            expectedOutputs.append([row[0] as! Double])
-            for i in 1..<row.count {
-                trainingInputs[trainingInputs.count - 1][i] = row[i] as! Double / 255.0
-            }
-        }
-        return (trainingInputs: trainingInputs, expectedOutputs: expectedOutputs)
-    } catch let error {
-        print("An error occured")
-        print(error.localizedDescription)
-        return nil
-    }
-}
-
-func fetchTestData(connection: Connection) -> [[Double]]? {
+func fetchTestData(targetLetter: Int, limit: Int, connection: Connection) -> [[Double]]? {
     var testData: [[Double]] = []
     do {
-        let statement = try connection.prepare("SELECT * FROM handwriting_data WHERE letter='5' ORDER BY RANDOM() LIMIT 1000")
+        let statement = try connection.prepare("SELECT * FROM handwriting_data WHERE NOT letter='\(targetLetter)' ORDER BY RANDOM() LIMIT \(limit)")
         for row in statement {
             testData.append([Double](repeating: 0.0, count: row.count))
             for i in 1..<row.count {
@@ -149,36 +127,6 @@ func fetchTestData(connection: Connection) -> [[Double]]? {
         print(error.localizedDescription)
         return nil
     }
-}
-
-func trainLetterA(connection: Connection, neuralNetwork: inout NeuralNetwork) {
-    print("Fetching letter 'A'")
-    guard let data = fetchLetterA(connection: connection) else {
-        print("Failed to fetch letter 'A'")
-        exit(EXIT_FAILURE)
-    }
-    print("Normalizing training data")
-    print("Training network..")
-    neuralNetwork.train(
-        trainingInputs: data.trainingInputs,
-        expectedOutputs: data.expectedOutputs,
-        learningRate: 0.3,
-        epochs: 5000,
-        targetError: 0.001
-    )
-    neuralNetwork.traverseColumn(atIndex: neuralNetwork.layerCount - 1)
-}
-
-func testLetterA(connection: Connection, neuralNetwork: inout NeuralNetwork) {
-    print("Fetching test data")
-    guard let testData = fetchTestData(connection: connection) else {
-        print("Failed to fetch test data")
-        exit(EXIT_FAILURE)
-    }
-    print(testData.count)
-    print("Testing..")
-    let average = neuralNetwork.test(inputs: testData)
-    print(average)
 }
 
 func main() {
@@ -210,7 +158,7 @@ func main() {
     }
     print("------------------------------------------------")
     print("Initializing neural network structure..")
-    let networkTopology = NetworkTopology(layers: [784, 78, 4, 2, 1], collectors: [Double](repeating: 0.0, count: 784))
+    let networkTopology = NetworkTopology(layers: [784, 10, 4, 1], collectors: [Double](repeating: 0.0, count: 784))
     print("Network structure: \(networkTopology.layers)")
     let neuralNetwork = NeuralNetwork(topology: networkTopology)
     print("------------------------------------------------")
@@ -219,13 +167,13 @@ func main() {
         exit(EXIT_FAILURE)
     }
     let learningRate = 0.65
-    let targetError = 0.009
+    let targetError = 0.04
     let epochs = 250
     print("------------------------------------------------")
     print("HYPERPARAMETERS:")
     print("Learning Rate: \(learningRate)")
     print("Target Error: \(targetError)")
-    print("Training Network \(epochs)")
+    print("Epochs: \(epochs)")
     print("Number of rows: \(data.trainingInputs.count)")
     print("------------------------------------------------")
     print("Training network for letter: \(letterNumber)")
@@ -238,6 +186,15 @@ func main() {
     )
     let collector = neuralNetwork.outputsAverage()
     print("Collector: \(collector)")
+    // Begin testing
+    print("Fetching test data....")
+    guard let testData = fetchTestData(targetLetter: letterNumber, limit: limit, connection: connection) else {
+        print("Failed to fetch test data")
+        exit(EXIT_FAILURE)
+    }
+    print("Feeding forward.....")
+    let outputAverage = neuralNetwork.test(inputs: testData)
+    print("Output average for incorrect letters: \(outputAverage)")
     exit(EXIT_SUCCESS)
 }
 

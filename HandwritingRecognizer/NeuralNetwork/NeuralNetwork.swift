@@ -40,7 +40,7 @@ struct NeuralNetwork: Codable {
         return column
     }
 
-    public func traverseColumn(atIndex: Int) {
+    public func printColumn(atIndex: Int) {
         if atIndex > lastIndex! {
             print("Layer does not exist")
             return
@@ -63,13 +63,13 @@ struct NeuralNetwork: Codable {
         return sum / Double(numberOfOutputs)
     }
 
-    public func traverseLayers() {
+    public func printLayers() {
         if layers.count == 0 {
             print("The network is empty")
             return
         }
         for index in 0..<layers.count {
-            traverseColumn(atIndex: index)
+            printColumn(atIndex: index)
         }
     }
 
